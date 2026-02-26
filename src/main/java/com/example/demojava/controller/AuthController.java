@@ -3,7 +3,7 @@ package com.example.demojava.controller;
 import com.example.demojava.dto.LoginRequest;
 import com.example.demojava.dto.LoginResponse;
 import com.example.demojava.dto.UserResponse;
-import com.example.demojava.service.UserService;
+import com.example.demojava.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/login")
 public class AuthController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
 
-        var user = userService.authenticate(
+        var user = authService.authenticate(
                 request.getTaxId(),
                 request.getPassword()
         );
