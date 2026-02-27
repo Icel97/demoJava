@@ -1,0 +1,775 @@
+{
+  "info": {
+    "_postman_id": "bda44475-fa03-440e-bf6d-2bfe710e3b90",
+    "name": "DemoJava API",
+    "description": "Technical test – User management API built with Spring Boot.  \nIncludes authentication, validation and error handling examples.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "23701601"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"User created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.id).to.exist;",
+                  "    pm.collectionVariables.set(\"userId\", json.id);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tax_id\": \"JOHA900101ABC\",\n  \"password\": \"Password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Update user",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+1204567890\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Update user name succed",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Updated Name\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users/{{userId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{userId}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 27 Feb 2026 20:31:41 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": \"65a1e39b-f306-4c51-b20d-f1bbf85e638b\",\n    \"email\": \"alice.johnson@mail.com\",\n    \"name\": \"Updated Name\",\n    \"phone\": \"+15551234567\",\n    \"taxId\": \"JOHA900101ABC\",\n    \"createdAt\": \"27-02-2026 23:31\",\n    \"addresses\": [\n        {\n            \"id\": 1,\n            \"name\": \"workaddress\",\n            \"street\": \"221B Baker Street\",\n            \"countryCode\": \"UK\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"homeaddress\",\n            \"street\": \"742 Evergreen Terrace\",\n            \"countryCode\": \"US\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get all users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response is an array\", function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Get all users",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 27 Feb 2026 20:12:05 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n    {\n        \"id\": \"ac83f6f8-a972-40c1-b1d3-af2f22ce29b8\",\n        \"email\": \"alice.johnson@mail.com\",\n        \"name\": \"Alice Johnson\",\n        \"phone\": \"+15551234567\",\n        \"taxId\": \"JOHA900101ABC\",\n        \"createdAt\": \"27-02-2026 23:06\",\n        \"addresses\": [\n            {\n                \"id\": 1,\n                \"name\": \"workaddress\",\n                \"street\": \"221B Baker Street\",\n                \"countryCode\": \"UK\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"homeaddress\",\n                \"street\": \"742 Evergreen Terrace\",\n                \"countryCode\": \"US\"\n            }\n        ]\n    },\n    {\n        \"id\": \"43140812-84ff-4caa-b883-1ac0fe81f791\",\n        \"email\": \"carla.lopez@mail.com\",\n        \"name\": \"Carla Lopez\",\n        \"phone\": \"+34911222333\",\n        \"taxId\": \"LOPC920202GHI\",\n        \"createdAt\": \"27-02-2026 23:06\",\n        \"addresses\": [\n            {\n                \"id\": 4,\n                \"name\": \"branch\",\n                \"street\": \"Gran Via 45\",\n                \"countryCode\": \"ES\"\n            },\n            {\n                \"id\": 5,\n                \"name\": \"summerhouse\",\n                \"street\": \"Calle Luna 77\",\n                \"countryCode\": \"ES\"\n            }\n        ]\n    },\n    {\n        \"id\": \"f3c76357-ec4a-4ad3-8615-ef0e9044e5ff\",\n        \"email\": \"bruno.smith@example.com\",\n        \"name\": \"Bruno Smith\",\n        \"phone\": \"+525512345678\",\n        \"taxId\": \"SMIB850505DEF\",\n        \"createdAt\": \"27-02-2026 23:06\",\n        \"addresses\": [\n            {\n                \"id\": 3,\n                \"name\": \"mainoffice\",\n                \"street\": \"Av. Reforma 123\",\n                \"countryCode\": \"MX\"\n            }\n        ]\n    },\n    {\n        \"id\": \"19db8e1f-9484-49a8-876c-7319643ee56e\",\n        \"email\": \"newuser@mail.com\",\n        \"name\": \"New User\",\n        \"phone\": \"+15555555555\",\n        \"taxId\": \"AARR990101XXX\",\n        \"createdAt\": \"27-02-2026 23:06\",\n        \"addresses\": []\n    },\n    {\n        \"id\": \"df3d8b76-1c1c-4be8-bd1a-7d42cd074fc8\",\n        \"email\": \"jane.doe@mail.com\",\n        \"name\": \"Jane Doe\",\n        \"phone\": \"+5215512345678\",\n        \"taxId\": \"GODE561231ABC\",\n        \"createdAt\": \"27-02-2026 23:07\",\n        \"addresses\": [\n            {\n                \"id\": 1,\n                \"name\": \"home\",\n                \"street\": \"Main Street 123\",\n                \"countryCode\": \"MX\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"office\",\n                \"street\": \"Business Ave 45\",\n                \"countryCode\": \"US\"\n            }\n        ]\n    },\n    {\n        \"id\": \"5b0fd2ea-470b-4927-8c18-dd63f42d06df\",\n        \"email\": \"noaddress@mail.com\",\n        \"name\": \"No Address\",\n        \"phone\": \"+15551234567\",\n        \"taxId\": \"LOPR800101XYZ\",\n        \"createdAt\": \"27-02-2026 23:08\",\n        \"addresses\": []\n    }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Create user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"User created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.id).to.exist;",
+                  "    pm.collectionVariables.set(\"userId\", json.id);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"badphone@mail.com\",\n  \"password\": \"SecurePass123\",\n  \"name\": \"Bad Phone\",\n  \"phone\": \"12345\",\n  \"tax_id\": \"HEGA900101AAA\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Create user succed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{ \n    \"email\": \"newuser@mail.com\", \n    \"password\": \"Password123\", \n    \"name\": \"New User\", \n    \"phone\": \"+15555555555\", \n    \"tax_id\": \"AARR990101XXX\" \n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 27 Feb 2026 20:06:51 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": \"19db8e1f-9484-49a8-876c-7319643ee56e\",\n    \"email\": \"newuser@mail.com\",\n    \"name\": \"New User\",\n    \"phone\": \"+15555555555\",\n    \"taxId\": \"AARR990101XXX\",\n    \"createdAt\": \"27-02-2026 23:06\",\n    \"addresses\": []\n}"
+            },
+            {
+              "name": "Create user succed with address",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"jane.doe@mail.com\",\n  \"password\": \"SecurePass123\",\n  \"name\": \"Jane Doe\",\n  \"phone\": \"+5215512345678\",\n  \"tax_id\": \"GODE561231ABC\",\n  \"addresses\": [\n    {\n      \"name\": \"home\",\n      \"street\": \"Main Street 123\",\n      \"countryCode\": \"MX\"\n    },\n    {\n      \"name\": \"office\",\n      \"street\": \"Business Ave 45\",\n      \"countryCode\": \"US\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 27 Feb 2026 20:07:58 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": \"df3d8b76-1c1c-4be8-bd1a-7d42cd074fc8\",\n    \"email\": \"jane.doe@mail.com\",\n    \"name\": \"Jane Doe\",\n    \"phone\": \"+5215512345678\",\n    \"taxId\": \"GODE561231ABC\",\n    \"createdAt\": \"27-02-2026 23:07\",\n    \"addresses\": [\n        {\n            \"id\": 1,\n            \"name\": \"home\",\n            \"street\": \"Main Street 123\",\n            \"countryCode\": \"MX\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"office\",\n            \"street\": \"Business Ave 45\",\n            \"countryCode\": \"US\"\n        }\n    ]\n}"
+            },
+            {
+              "name": "Create user duplicate tax id",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"duplicate@mail.com\",\n  \"password\": \"SecurePass123\",\n  \"name\": \"Duplicate\",\n  \"phone\": \"+15557654321\",\n  \"tax_id\": \"LOPR800101XYZ\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 27 Feb 2026 20:08:57 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": 400,\n    \"error\": \"Bad Request\",\n    \"message\": \"Tax ID already exists: LOPR800101XYZ\",\n    \"details\": null,\n    \"timestamp\": \"2026-02-27T14:08:57.467828\"\n}"
+            },
+            {
+              "name": "Create user invalid tax id",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"invalidrfc@mail.com\",\n  \"password\": \"SecurePass123\",\n  \"name\": \"Invalid RFC\",\n  \"phone\": \"+15551234567\",\n  \"tax_id\": \"INVALID123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 27 Feb 2026 20:09:30 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": 400,\n    \"error\": \"Validation Failed\",\n    \"message\": \"Invalid request data\",\n    \"details\": [\n        \"taxId: tax_id must follow RFC format: AAAA######XXX\"\n    ],\n    \"timestamp\": \"2026-02-27T14:09:30.441104\"\n}"
+            },
+            {
+              "name": "Create user invalid phone",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"badphone@mail.com\",\n  \"password\": \"SecurePass123\",\n  \"name\": \"Bad Phone\",\n  \"phone\": \"12345\",\n  \"tax_id\": \"HEGA900101AAA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 27 Feb 2026 20:10:11 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": 400,\n    \"error\": \"Validation Failed\",\n    \"message\": \"Invalid request data\",\n    \"details\": [\n        \"phone: Phone must be 10-15 digits and may include country code\"\n    ],\n    \"timestamp\": \"2026-02-27T14:10:11.390456\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"User deleted\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Delete user succed",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/users/{{userId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    "{{userId}}"
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Fri, 27 Feb 2026 21:03:49 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": null
+            }
+          ]
+        },
+        {
+          "name": "Get users filter",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users?filter=name%2Bco%2BAlice",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "name%2Bco%2BAlice"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Get users filter name succed",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/users?filter=name%2Bco%2BAlice",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "name%2Bco%2BAlice"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 27 Feb 2026 21:02:59 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n    {\n        \"id\": \"557765c8-340a-4c7a-93ef-bc77cfaffc32\",\n        \"email\": \"alice.johnson@mail.com\",\n        \"name\": \"Alice Johnson\",\n        \"phone\": \"+1204567890\",\n        \"taxId\": \"JOHA900101ABC\",\n        \"createdAt\": \"28-02-2026 00:01\",\n        \"addresses\": [\n            {\n                \"id\": 1,\n                \"name\": \"workaddress\",\n                \"street\": \"221B Baker Street\",\n                \"countryCode\": \"UK\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"homeaddress\",\n                \"street\": \"742 Evergreen Terrace\",\n                \"countryCode\": \"US\"\n            }\n        ]\n    }\n]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Errors",
+      "item": [
+        {
+          "name": "Create user – validation error",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Validation error returned\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"bad-email\",\n  \"phone\": \"123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
