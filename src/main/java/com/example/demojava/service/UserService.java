@@ -6,10 +6,12 @@ import com.example.demojava.dto.UserResponse;
 import com.example.demojava.model.Address;
 import com.example.demojava.model.User;
 
+import com.example.demojava.repository.UserRepository;
 import com.example.demojava.util.CryptoUtil;
 import com.example.demojava.util.DateUtil;
-import jakarta.annotation.PostConstruct;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,33 +21,20 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    private final List<User> users = new ArrayList<>();
-
     private int addressSequence = 1;
+
+    private final UserRepository repository;
+
+    public UserService(UserRepository repository) {
+        this.repository = repository;
+    }
 
     private int generateAddressId() {
         return addressSequence++;
     }
 
-    @PostConstruct
-    public void init() {
-        users.add(new User(
-                UUID.randomUUID(),
-                "user1@gmail.com",
-                "user1",
-                "+15555555555",
-                CryptoUtil.encrypt("123456"),
-                "AARR990101XXX",
-                DateUtil.nowMadagascar(),
-                List.of(
-                        new Address(1, "workaddress", "street No. 1", "UK"),
-                        new Address(2, "homeaddress", "street No. 2", "AU")
-                )
-        ));
-    }
-
     public List<UserResponse> getUsersSorted(String sortedBy) {
-        List<User> sortedUsers = new ArrayList<>(users);
+        List<User> sortedUsers = new ArrayList<>(repository.getUsers());
 
         if (sortedBy == null || sortedBy.isBlank()) {
             return sortedUsers.stream()
@@ -102,14 +91,14 @@ public class UserService {
         String operator = parts[1];
         String value = parts[2];
 
-        return users.stream()
+        return repository.getUsers().stream()
                 .filter(user -> applyFilter(user, field, operator, value))
                 .map(UserResponse::from)
                 .toList();
     }
 
     public UserResponse createUser(UserCreateRequest request) {
-        boolean taxIdExists = users.stream()
+        boolean taxIdExists = repository.getUsers().stream()
                 .anyMatch(user -> user.getTaxId().equals(request.taxId()));
 
         if (taxIdExists) {
@@ -136,7 +125,7 @@ public class UserService {
                                 .toList()
         );
 
-        users.add(user);
+        repository.getUsers().add(user);
 
         return UserResponse.from(user);
     }
@@ -147,49 +136,61 @@ public class UserService {
         try {
             userId = UUID.fromString(id);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid UUID format");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid UUID format");
         }
 
-        User user = users.stream()
+        User user = repository.getUsers().stream()
                 .filter(u -> u.getId().equals(userId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        if (request.getEmail() != null) {
-            user.setEmail(request.getEmail());
+        if (request.email() != null) {
+            user.setEmail(request.email());
         }
 
-        if (request.getName() != null) {
-            user.setName(request.getName());
+        if (request.name() != null) {
+            user.setName(request.name());
         }
 
-        if (request.getPhone() != null) {
-            user.setPhone(request.getPhone());
+        if (request.phone() != null) {
+            user.setPhone(request.phone());
         }
 
-        if (request.getPassword() != null) {
-            user.setPassword(CryptoUtil.encrypt(request.getPassword()));
+        if (request.password() != null) {
+            user.setPassword(CryptoUtil.encrypt(request.password()));
         }
 
-        if (request.getTaxId() != null) {
-            boolean exists = users.stream()
+        if (request.taxId() != null) {
+            boolean exists = repository.getUsers().stream()
                     .anyMatch(u ->
                             !u.getId().equals(userId) &&
-                                    u.getTaxId().equals(request.getTaxId())
+                                    u.getTaxId().equals(request.taxId())
                     );
 
             if (exists) {
-                throw new IllegalArgumentException("TaxId already exists");
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "TaxId already exists");
             }
 
-            user.setTaxId(request.getTaxId());
+            user.setTaxId(request.taxId());
+        }
+
+        if (request.addresses() != null) {
+            List<Address> updatedAddresses = request.addresses().stream()
+                    .map(addr -> new Address(
+                            generateAddressId(),
+                            addr.name(),
+                            addr.street(),
+                            addr.countryCode()
+                    ))
+                    .toList();
+            user.setAddresses(updatedAddresses);
         }
 
         return UserResponse.from(user);
     }
 
     public void deleteUser(UUID id) {
-        boolean removed = users.removeIf(user -> user.getId().equals(id));
+        boolean removed = repository.getUsers().removeIf(user -> user.getId().equals(id));
 
         if (!removed) {
             throw new IllegalArgumentException("User not found with id: " + id);

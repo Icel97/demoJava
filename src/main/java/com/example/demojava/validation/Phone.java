@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Phone {
 
-    String message() default "Invalid phone format";
+    String message() default "Phone must be 10-15 digits and may include country code";
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

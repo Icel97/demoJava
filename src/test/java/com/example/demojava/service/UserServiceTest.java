@@ -2,6 +2,7 @@ package com.example.demojava.service;
 
 import com.example.demojava.dto.UserCreateRequest;
 import com.example.demojava.dto.UserResponse;
+import com.example.demojava.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,10 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceTest {
 
     private UserService userService;
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
-        userService = new UserService();
+        userRepository = new UserRepository();
+        userService = new UserService(userRepository);
     }
 
     @Test

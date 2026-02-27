@@ -1,8 +1,10 @@
 package com.example.demojava.dto;
 
+import com.example.demojava.validation.Phone;
+import com.example.demojava.validation.RFC;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
@@ -16,6 +18,7 @@ public record UserCreateRequest (
         String name,
 
         @NotBlank
+        @Phone
         String phone,
 
         @NotBlank
@@ -23,10 +26,8 @@ public record UserCreateRequest (
         String password,
 
         @NotBlank
-        @Pattern(
-                regexp = "^[A-Z]{4}\\d{6}[A-Z0-9]{3}$",
-                message = "Invalid taxId format"
-        )
+        @JsonProperty("tax_id")
+        @RFC
         String taxId,
 
         List<AddressRequest> addresses

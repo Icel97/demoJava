@@ -5,6 +5,7 @@ import com.example.demojava.dto.UserPatchRequest;
 import com.example.demojava.dto.UserResponse;
 import com.example.demojava.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,17 +35,17 @@ public class UserController {
     }
 
     @PostMapping
-    @ResponseStatus
+    @ResponseStatus(HttpStatus.CREATED)
     public UserResponse createUser(
             @Valid @RequestBody UserCreateRequest request
     ) {
         return userService.createUser(request);
     }
 
-    @PatchMapping
+    @PatchMapping("/{id}")
     public UserResponse updateUser(
             @PathVariable String id,
-            @RequestBody UserPatchRequest request
+            @Valid @RequestBody UserPatchRequest request
     ) {
         return userService.updateUser(id, request);
     }

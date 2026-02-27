@@ -5,12 +5,13 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class PhoneValidator implements ConstraintValidator<Phone, String> {
 
+    private  static  final String PHONE_REGEX =
+            "^\\+?\\d{10,15}$";
+
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null) return false;
+        if (value == null) return true;
 
-        String normalized = value.replaceAll("[\\s-]", "");
-
-        return normalized.matches("^\\+?\\d{11,13}$");
+        return value.matches(PHONE_REGEX);
     }
 }

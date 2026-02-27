@@ -2,25 +2,28 @@ package com.example.demojava.dto;
 
 import com.example.demojava.validation.Phone;
 import com.example.demojava.validation.RFC;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.List;
 
-@Getter
-@Setter
-public class UserPatchRequest {
+public record UserPatchRequest (
 
     @Email(message = "Invalid email format")
-    private String email;
+    String email,
 
-    private String name;
+    String name,
 
     @Phone
-    private String phone;
+    String phone,
 
-    private String password;
+    @Size(min = 6, message = "Password must be at least 6 characters long")
+    String password,
 
+    @JsonProperty("tax_id")
     @RFC
-    private String taxId;
-}
+    String taxId,
+
+    List<AddressRequest>addresses
+) { }

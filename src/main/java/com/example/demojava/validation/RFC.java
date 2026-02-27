@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RFC {
 
-    String message() default "Invalid RFC format";
+    String message() default "tax_id must follow RFC format: AAAA######XXX";
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

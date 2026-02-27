@@ -1,8 +1,11 @@
 package com.example.demojava.dto;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
 public class ApiError {
 
     private int status;
